@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://2dwv85qksl4q"]
+
+[ext_resource type="PackedScene" uid="uid://dsijd7uvqx4sp" path="res://scenes/level_0.tscn" id="1_rluen"]
+[ext_resource type="PackedScene" uid="uid://ba2vtokupu7rt" path="res://scenes/astronaut.tscn" id="2_mnr7a"]
+
+[node name="Game" type="Node"]
+
+[node name="Level0" parent="." instance=ExtResource("1_rluen")]
+position = Vector2(-2983, -772)
+scale = Vector2(3, 1)
+
+[node name="Astronaut" parent="." instance=ExtResource("2_mnr7a")]

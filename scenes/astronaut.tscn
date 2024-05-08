@@ -1,0 +1,214 @@
+[gd_scene load_steps=14 format=3 uid="uid://ba2vtokupu7rt"]
+
+[ext_resource type="Texture2D" uid="uid://i82x2uyb7un7" path="res://assets/astronaut.png" id="1_4vniv"]
+[ext_resource type="Script" path="res://scripts/astronaut.gd" id="1_gv1rh"]
+[ext_resource type="Script" path="res://scripts/state/state_machine.gd" id="3_ftsqe"]
+[ext_resource type="Script" path="res://scripts/state/player/idle.gd" id="4_i28xg"]
+[ext_resource type="Script" path="res://scripts/state/player/jump.gd" id="5_xu1ic"]
+[ext_resource type="Script" path="res://scripts/state/player/walk.gd" id="6_a6ern"]
+[ext_resource type="Script" path="res://scripts/state/player/fall.gd" id="7_ghhbu"]
+
+[sub_resource type="Animation" id="Animation_45udh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/arm:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.36136]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/hip:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(255, 387)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/hip:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.0698132]
+}
+
+[sub_resource type="Animation" id="Animation_6drh4"]
+resource_name = "fall"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/arm:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [-1.0472, -1.0821, -1.0821, -1.22173, -1.22173]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/hip:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.0349066, -0.0698132, -0.10472]
+}
+
+[sub_resource type="Animation" id="Animation_biq4v"]
+resource_name = "jump"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/arm:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.36136, 1.5708, 1.22173, 0.523599, -1.5708]
+}
+
+[sub_resource type="Animation" id="Animation_ffbvm"]
+resource_name = "walk"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/arm:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.36136, 1.91986, 1.0472]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/hip:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(255, 390), Vector2(255, 380), Vector2(255, 390)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/hip:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.0698132, 0.0698132]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v6vx2"]
+_data = {
+"RESET": SubResource("Animation_45udh"),
+"fall": SubResource("Animation_6drh4"),
+"jump": SubResource("Animation_biq4v"),
+"walk": SubResource("Animation_ffbvm")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0aihx"]
+radius = 33.0
+height = 152.0
+
+[node name="Astronaut" type="CharacterBody2D"]
+script = ExtResource("1_gv1rh")
+
+[node name="polygons" type="Node2D" parent="."]
+position = Vector2(-19, 358)
+scale = Vector2(0.4, 0.4)
+
+[node name="Body" type="Polygon2D" parent="polygons"]
+texture = ExtResource("1_4vniv")
+skeleton = NodePath("../../Skeleton2D")
+polygon = PackedVector2Array(257.874, 472.441, 340.157, 449.213, 362.205, 119.685, 246.457, 82.6772, 145.669, 155.906, 108.661, 407.874, 225.197, 472.047)
+uv = PackedVector2Array(257.874, 472.441, 340.157, 449.213, 362.205, 119.685, 246.457, 82.6772, 145.669, 155.906, 108.661, 407.874, 225.197, 472.047)
+bones = ["hip", PackedFloat32Array(1, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94), "hip/Back", PackedFloat32Array(0, 0, 0, 0, 0, 0, 0), "arm", PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)]
+
+[node name="Arm" type="Polygon2D" parent="polygons"]
+position = Vector2(-145, 20)
+texture = ExtResource("1_4vniv")
+skeleton = NodePath("../../Skeleton2D")
+polygon = PackedVector2Array(365.449, 319.594, 391.039, 430.224, 430.803, 435.736, 459.15, 409.358, 433.953, 297.941, 394.189, 287.311)
+uv = PackedVector2Array(365.449, 319.594, 391.039, 430.224, 430.803, 435.736, 459.15, 409.358, 433.953, 297.941, 394.189, 287.311)
+bones = ["hip", PackedFloat32Array(0, 0, 0, 0, 0, 0), "hip/Back", PackedFloat32Array(0, 0, 0, 0, 0, 0), "arm", PackedFloat32Array(0.94, 0.94, 0.94, 0.94, 0.94, 0.94)]
+
+[node name="Skeleton2D" type="Skeleton2D" parent="."]
+position = Vector2(-18, 356)
+scale = Vector2(0.4, 0.4)
+
+[node name="hip" type="Bone2D" parent="Skeleton2D"]
+position = Vector2(255, 387)
+rotation = -0.0698132
+rest = Transform2D(1, 0, 0, 1, 255, 390)
+
+[node name="Back" type="Bone2D" parent="Skeleton2D/hip"]
+rotation = -1.5708
+scale = Vector2(13, 13)
+rest = Transform2D(-5.68248e-07, -13, 13, -5.68248e-07, 0, 0)
+
+[node name="arm" type="Bone2D" parent="Skeleton2D"]
+position = Vector2(255, 331)
+rotation = 1.36136
+scale = Vector2(7, 7)
+rest = Transform2D(1.45538, 6.84703, -6.84703, 1.45538, 255, 331)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_v6vx2")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(86, 470)
+shape = SubResource("CapsuleShape2D_0aihx")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(317, 315)
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_ftsqe")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_i28xg")
+
+[node name="Jump" type="Node" parent="StateMachine"]
+script = ExtResource("5_xu1ic")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("6_a6ern")
+
+[node name="Fall" type="Node" parent="StateMachine"]
+script = ExtResource("7_ghhbu")
